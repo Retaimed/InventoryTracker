@@ -20,4 +20,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
 
-export {firestore} // extort to be able to access other files 
+export {app, firestore} // extort to be able to access other files 
