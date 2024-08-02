@@ -246,7 +246,7 @@ export default function Home() {
         />
         <Box border='1px solid #333' borderRadius="8px" overflow="hidden">
           <Box width="800px" height="100px" bgcolor="#ADD8E6" display="flex" alignItems="center" justifyContent="center">
-            <Typography variant="h2" color = '#333'> Inventory Management</Typography>
+            <Typography variant="h2" color='#333'> Inventory Management</Typography>
           </Box>
           <Stack width="800px" height="300px" spacing={2} overflow="auto" p={2}>
             {filterInv.map(({ name, quantity }) => (
@@ -261,7 +261,7 @@ export default function Home() {
                   <Button variant="contained" onClick={() => addItem(name)}>
                     Add 
                   </Button>        
-                  <Button variant="contained" onClick={() => handleOpenRemoveModal()}>
+                  <Button variant="contained" onClick={() => removeItem(name)}>
                     Remove 
                   </Button> 
                 </Stack>
@@ -270,9 +270,8 @@ export default function Home() {
           </Stack>
         </Box>
       </Box>
-
       <Box width="100%" bgcolor="#ADD8E6" p={2} textAlign="center">
-        <Typography variant="body1" color="#333">
+        <Typography variant="h3" color="#333">
           © Created by Ryan Eshan
         </Typography>
       </Box>
