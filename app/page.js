@@ -9,6 +9,11 @@ export default function Home() {
   const [inventory, setInventory] = useState([]); // helper function to store inventory data 
   const [open, setOpen] = useState(false); // helper function to add and remove items 
   const [itemName, setItemName] = useState(''); // store the name of the item we type out
+  const [searchTerm, setSearchTerm] = useState(''); // store the name of the item we type out
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  }
 
   const updateInventory = async () => { //async wont block code when running, if code is blocked then website will freeze
     const snapshot = query(collection(firestore, 'inventory'));
@@ -59,6 +64,10 @@ export default function Home() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const filterInv = inventory.filter(item => // use to filter the inventory 
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
   
   return (
     <Box width="100vw" height="100vh" display="flex" flexDirection="column" justifyContent="center" alignItems="center" gap={2}>
@@ -86,7 +95,7 @@ export default function Home() {
           <Stack width="100%" direction="row" spacing={2}>
             <TextField
               variant="outlined"
-              fillWidth
+              fullWidth
               value={itemName}
               onChange={(e) => setItemName(e.target.value)} // this is a function that will be called when the value of the textfield changes
             ></TextField>
@@ -101,37 +110,39 @@ export default function Home() {
           </Stack>
         </Box>
       </Modal>
-      <Button variant="contained" onClick={() => {
-        handleOpen();
-      }}>
+      <Button variant="contained" onClick={handleOpen}>
         Add New Item 
       </Button>
-      <Box border='1px solid #333'>
+      <TextField // Search Bar
+        label="Search"
+        variant="outlined"
+        value={searchTerm}
+        onChange={handleSearch}
+      />
+      <Box border='1px solid #333' borderRadius="8px" overflow="hidden">
         <Box width="800px" height="100px" bgcolor="#ADD8E6" display="flex" alignItems="center" justifyContent="center">
-        <Typography variant="h2" color = '#333'> Inventory Items</Typography>
+          <Typography variant="h2" color = '#333'> Inventory Management</Typography>
         </Box>
-      <Stack width="800px" height="300px" spacing={2} overflow="auto">
-        {inventory.map(({ name, quantity }) => (
-          <Box key={name} width="100%" minHeight="150px" display="flex" alignItems="center" justifyContent="space-between" bgcolor="#f0f0f0" padding={5}>
-            <Typography variant='h3' color='#333' textAlign='center'> 
-              {name.charAt(0).toUpperCase() + name.slice(1)}
+        <Stack width="800px" height="300px" spacing={2} overflow="auto" p={2}>
+          {filterInv.map(({ name, quantity }) => (
+            <Box key={name} width="100%" minHeight="150px" display="flex" alignItems="center" justifyContent="space-between" bgcolor="#f0f0f0" padding={5} borderRadius="8px">
+              <Typography variant='h3' color='#333' textAlign='center'> 
+                {name.charAt(0).toUpperCase() + name.slice(1)}
               </Typography>
-            <Typography variant='h3' color='#333' textAlign='center'> 
-              {quantity}
+              <Typography variant='h3' color='#333' textAlign='center'> 
+                {quantity}
               </Typography>
               <Stack direction='row' spacing={2}>
-                <Button variant="contained" onClick={() => {
-                addItem(name);
-                }}>Add 
-                  </Button>        
-              <Button variant="contained" onClick={() => {
-                removeItem(name);
-              }}>Remove 
-              </Button> 
+                <Button variant="contained" onClick={() => addItem(name)}>
+                  Add 
+                </Button>        
+                <Button variant="contained" onClick={() => removeItem(name)}>
+                  Remove 
+                </Button> 
               </Stack>
-          </Box>
-        ))}
-      </Stack>
+            </Box>
+          ))}
+        </Stack>
       </Box>
     </Box>
   );
