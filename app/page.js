@@ -24,7 +24,8 @@ export default function Home() {
   };
 
   const addItem = async (item) => {
-    const docRef = doc(collection(firestore, 'inventory'), item);
+    const formattedItem = item.toLowerCase(); // this is for cases like Boxes and BOxES to be treated as the same item
+    const docRef = doc(collection(firestore, 'inventory'), formattedItem);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
@@ -37,7 +38,8 @@ export default function Home() {
   };
 
   const removeItem = async (item) => {
-    const docRef = doc(collection(firestore, 'inventory'), item);
+    const formattedItem = item.toLowerCase(); // this is for cases like Boxes and BOxES to be treated as the same item
+    const docRef = doc(collection(firestore, 'inventory'), formattedItem);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
